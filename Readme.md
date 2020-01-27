@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Марина Петрова](https://up.htmlacademy.ru/javascript/19/user/1176497).
-* Наставник: `Неизвестно`.
+- Студент: [Марина Петрова](https://up.htmlacademy.ru/javascript/19/user/1176497).
+- Наставник: [Никита Сигов](https://htmlacademy.ru/profile/id17860).
 
 ---
 
