@@ -73,7 +73,7 @@ var createPin = function (item) {
   newPin.querySelector('img').src = item.author.avatar;
   newPin.querySelector('img').alt = item.offer.title;
   return newPin;
-}
+};
 
 var fillMap = function () {
   var objects = generateSimilars();
@@ -87,7 +87,7 @@ var fillMap = function () {
   }
 
   document.querySelector('.map__pins').appendChild(objectsFragment);
-}
+};
 
 document.querySelector('.map').classList.remove('map--faded');
 
