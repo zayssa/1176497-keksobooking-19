@@ -140,7 +140,7 @@ var createCard = function (item) {
       return accumulator;
     }, '');
   } else {
-    newCard.removeChild(newCard.querySelector('.popup__features'));
+    newCard.querySelector('.popup').removeChild(newCard.querySelector('.popup__features'));
   }
   newCard.querySelector('.popup__description').innerHTML = item.offer.description;
   if (item.offer.photos.length) {
@@ -154,7 +154,7 @@ var createCard = function (item) {
     newCard.querySelector('.popup__photos').innerHTML = '';
     newCard.querySelector('.popup__photos').appendChild(itemPhotos);
   } else {
-    newCard.removeChild(newCard.querySelector('.popup__photos'));
+    newCard.querySelector('.popup').removeChild(newCard.querySelector('.popup__photos'));
   }
   newCard.querySelector('.popup__avatar').src = item.author.avatar;
   return newCard;
