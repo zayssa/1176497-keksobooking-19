@@ -181,24 +181,19 @@ var toggleFormsDisable = function (flag) {
     }
   }
   isPageDisabled = flag;
-  fillAddressField(getCurrentPosition('main'));
+  fillAddressField(getCurrentPosition());
 };
 
-var getCurrentPosition = function (el) {
+var getCurrentPosition = function () {
   // x - половина ширины метки
   // у - высота метки
   var deltas = {
-    x: 20,
-    y: 40
+    x: 32,
+    y: 87
   };
-  if (el === 'main') {
-    el = document.querySelector('.map__pin--main');
-    deltas.x = 32;
-    if (isPageDisabled) {
-      deltas.y = 32;
-    } else {
-      deltas.y = 87;
-    }
+  var el = document.querySelector('.map__pin--main');
+  if (isPageDisabled) {
+    deltas.y = 32;
   }
 
   return {
@@ -212,7 +207,7 @@ var fillAddressField = function (coords) {
 };
 
 toggleFormsDisable(true);
-fillAddressField(getCurrentPosition('main'));
+fillAddressField(getCurrentPosition());
 
 document.querySelector('.map__pin--main').addEventListener('mousedown', function (evt) {
   if (evt.button === 0) {
