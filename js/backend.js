@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  var getSimilars = function () {
+  var get = function (src) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://js.dump.academy/keksobooking/data', false);
+    xhr.open('GET', src, false);
     xhr.send();
     if (xhr.status !== 200) {
       return xhr.status + ': ' + xhr.statusText;
@@ -12,7 +12,7 @@
     }
   };
 
-  window.xhr = {
-    getSimilars: getSimilars
+  window.backend = {
+    get: get
   };
 })();

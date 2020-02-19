@@ -2,7 +2,7 @@
 
 (function () {
   var fillMap = function () {
-    var objectsList = window.xhr.getSimilars();
+    var objectsList = window.backend.get('https://js.dump.academy/keksobooking/data');
 
     var objectsFragment = document.createDocumentFragment();
     for (var i = 0; i < objectsList.length; i++) {
