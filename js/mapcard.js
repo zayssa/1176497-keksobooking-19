@@ -35,7 +35,7 @@
     return newCard;
   };
 
-  window.card = {
+  window.mapcard = {
     create: createCard
   };
 })();
