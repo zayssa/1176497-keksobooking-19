@@ -1,16 +1,28 @@
 'use strict';
 
 (function () {
+  var clearMap = function () {
+    document.querySelector('.map__pins').innerHTML = '';
+    if (document.querySelector('.map__card')) {
+      document.querySelector('.map__card').remove();
+    }
+  };
+
   var fillMap = function () {
+    clearMap();
     var objectsList = window.backend.get('https://js.dump.academy/keksobooking/data');
 
     var objectsFragment = document.createDocumentFragment();
-    for (var i = 0; i < objectsList.length; i++) {
-      var newPin = window.mappin.create(objectsList[i]);
-      objectsFragment.appendChild(newPin);
+    for (var i = 0, total = 0; i < objectsList.length && total < window.settings.maxPoints; i++) {
+      if (window.mapfilter.type === objectsList[i].offer.type || window.mapfilter.type === 'any') {
+        var newPin = window.mappin.create(objectsList[i]);
+        objectsFragment.appendChild(newPin);
+        total++;
+      }
     }
+
     document.querySelector('.map__pins').appendChild(objectsFragment);
-    document.querySelector('.map').insertBefore(window.mapcard.create(objectsList[0]), document.querySelector('.map__filters-container'));
+    // document.querySelector('.map').insertBefore(window.mapcard.create(objectsList[0]), document.querySelector('.map__filters-container'));
   };
 
   var unlockMap = function () {
@@ -33,6 +45,7 @@
   });
 
   window.map = {
+    clear: clearMap,
     fill: fillMap
   };
 })();
