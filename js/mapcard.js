@@ -2,6 +2,7 @@
 
 (function () {
   var createCard = function (item) {
+    removeCard();
     var newCard = document.querySelector('#card').content.cloneNode(true);
     newCard.querySelector('.popup__title').innerHTML = item.offer.title;
     newCard.querySelector('.popup__text--address').innerHTML = item.offer.address;
@@ -32,10 +33,24 @@
       newCard.querySelector('.popup').removeChild(newCard.querySelector('.popup__photos'));
     }
     newCard.querySelector('.popup__avatar').src = item.author.avatar;
+
+    newCard.querySelector('.popup__close').addEventListener('click', removeCard);
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Escape') {
+        removeCard();
+      }
+    });
     return newCard;
   };
 
+  var removeCard = function () {
+    if (document.querySelector('.map__card')) {
+      document.querySelector('.map__card').remove();
+    }
+  };
+
   window.mapcard = {
-    create: createCard
+    create: createCard,
+    remove: removeCard
   };
 })();

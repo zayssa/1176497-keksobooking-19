@@ -3,9 +3,7 @@
 (function () {
   var clearMap = function () {
     document.querySelector('.map__pins').innerHTML = '';
-    if (document.querySelector('.map__card')) {
-      document.querySelector('.map__card').remove();
-    }
+    window.mapcard.remove();
   };
 
   var fillMap = function () {
@@ -22,14 +20,13 @@
     }
 
     document.querySelector('.map__pins').appendChild(objectsFragment);
-    // document.querySelector('.map').insertBefore(window.mapcard.create(objectsList[0]), document.querySelector('.map__filters-container'));
   };
 
   var unlockMap = function () {
     window.form.switchDisable(false);
+    fillMap();
     document.querySelector('.map').classList.remove('map--faded');
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
-    fillMap();
   };
 
   document.querySelector('.map__pin--main').addEventListener('mousedown', function (evt) {
