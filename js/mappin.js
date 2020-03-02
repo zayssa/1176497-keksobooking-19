@@ -37,8 +37,19 @@
     return newPin;
   };
 
+  var removePins = function () {
+    if (document.querySelector('.map__pins .map__pin:not(.map__pin--main)')) {
+      var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
+      for (var i = 0; i < pins.length; i++) {
+        pins[i].remove();
+      }
+    }
+  };
+
+
   window.mappin = {
     create: createPin,
+    remove: removePins,
     getCoords: getPinCoords
   };
 })();
