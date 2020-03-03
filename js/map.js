@@ -22,13 +22,14 @@
 
     document.querySelector('.map__pins').appendChild(objectsFragment);
     if (total) {
+      window.mapfilter.switchDisable(false);
       document.querySelector('.map').classList.remove('map--faded');
-      document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     }
   };
 
   var unlockMap = function () {
     window.form.switchDisable(false);
+    document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     fillMap();
   };
 

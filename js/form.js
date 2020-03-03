@@ -6,7 +6,7 @@
   };
 
   var switchDisable = function (flag) {
-    var formsList = document.querySelectorAll('.map__filters, .ad-form');
+    var formsList = document.querySelectorAll('.ad-form');
     for (var i = 0; i < formsList.length; i++) {
       var toDisable = formsList[i].querySelectorAll('input, select');
       for (var k = 0; k < toDisable.length; k++) {
@@ -74,16 +74,22 @@
   //       elPrice.placeholder = '0';
   //   }
 
-  //   document.querySelector('.ad-form').reportValidity();
+  //   elPrice.reportValidity();
   // };
 
-  // var validateTime = function (evt) {
+  // var setEqualTime = function (evt) {
   //   document.querySelector('#timein').value = evt.target.value;
   //   document.querySelector('#timeout').value = evt.target.value;
   // };
 
   document.querySelector('#room_number').onchange = validateRoomsAndCapacity;
   document.querySelector('#capacity').onchange = validateRoomsAndCapacity;
+
+  // document.querySelector('#timein').onchange = setEqualTime;
+  // document.querySelector('#timeout').onchange = setEqualTime;
+
+  // document.querySelector('#type').onchange = validatePriceAndType;
+  // document.querySelector('#price').onchange = validatePriceAndType;
 
   window.form = {
     fillAddress: fillAddress,
