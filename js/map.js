@@ -1,21 +1,34 @@
 'use strict';
 
 (function () {
+  var clearMap = function () {
+    window.mapcard.remove();
+    window.mappin.remove();
+  };
+
   var fillMap = function () {
+    clearMap();
     var objectsList = window.backend.get('https://js.dump.academy/keksobooking/data');
 
     var objectsFragment = document.createDocumentFragment();
-    for (var i = 0; i < objectsList.length; i++) {
-      var newPin = window.mappin.create(objectsList[i]);
-      objectsFragment.appendChild(newPin);
+    var total = 0;
+    for (var i = 0; i < objectsList.length && total < window.settings.maxPoints; i++) {
+      if (objectsList[i].offer && (window.mapfilter.type === objectsList[i].offer.type || window.mapfilter.type === 'any')) {
+        var newPin = window.mappin.create(objectsList[i]);
+        objectsFragment.appendChild(newPin);
+        total++;
+      }
     }
+
     document.querySelector('.map__pins').appendChild(objectsFragment);
-    document.querySelector('.map').insertBefore(window.mapcard.create(objectsList[0]), document.querySelector('.map__filters-container'));
+    if (total) {
+      window.mapfilter.switchDisable(false);
+      document.querySelector('.map').classList.remove('map--faded');
+    }
   };
 
   var unlockMap = function () {
     window.form.switchDisable(false);
-    document.querySelector('.map').classList.remove('map--faded');
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     fillMap();
   };
@@ -33,6 +46,7 @@
   });
 
   window.map = {
+    clear: clearMap,
     fill: fillMap
   };
 })();

@@ -3,6 +3,8 @@
 
 (function () {
   window.settings = {
-    isDisabled: true
+    isDisabled: true,
+    maxPoints: 5
   };
 })();
+
