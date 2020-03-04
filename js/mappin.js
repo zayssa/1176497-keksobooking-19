@@ -30,11 +30,26 @@
     newPin.querySelector('.map__pin').style = 'left: ' + (item.location.x - 25) + 'px; top: ' + (item.location.y - 70) + 'px;';
     newPin.querySelector('img').src = item.author.avatar;
     newPin.querySelector('img').alt = item.offer.title;
+
+    newPin.querySelector('.map__pin').addEventListener('click', function () {
+      document.querySelector('.map').insertBefore(window.mapcard.create(item), document.querySelector('.map__filters-container'));
+    });
     return newPin;
   };
 
+  var removePins = function () {
+    if (document.querySelector('.map__pins .map__pin:not(.map__pin--main)')) {
+      var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
+      for (var i = 0; i < pins.length; i++) {
+        pins[i].remove();
+      }
+    }
+  };
+
+
   window.mappin = {
     create: createPin,
+    remove: removePins,
     getCoords: getPinCoords
   };
 })();
