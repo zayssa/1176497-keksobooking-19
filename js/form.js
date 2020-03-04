@@ -49,47 +49,47 @@
         break;
     }
 
-    document.querySelector('.ad-form').reportValidity();
+    elCapacity.reportValidity();
   };
 
-  // var validatePriceAndType = function () {
-  //   var valType = document.querySelector('#type');
-  //   var elPrice = document.querySelector('#price');
+  var validatePriceAndType = function () {
+    var valType = document.querySelector('#type').value;
+    var elPrice = document.querySelector('#price');
 
-  //   switch (valType) {
-  //     case 'palace':
-  //       elPrice.min = 10000;
-  //       elPrice.placeholder = '10000';
-  //       break;
-  //     case 'house':
-  //       elPrice.min = 5000;
-  //       elPrice.placeholder = '5000';
-  //       break;
-  //     case 'flat':
-  //       elPrice.min = 1000;
-  //       elPrice.placeholder = '1000';
-  //       break;
-  //     default:
-  //       elPrice.min = 0;
-  //       elPrice.placeholder = '0';
-  //   }
+    switch (valType) {
+      case 'palace':
+        elPrice.min = 10000;
+        elPrice.placeholder = '10000';
+        break;
+      case 'house':
+        elPrice.min = 5000;
+        elPrice.placeholder = '5000';
+        break;
+      case 'flat':
+        elPrice.min = 1000;
+        elPrice.placeholder = '1000';
+        break;
+      default:
+        elPrice.min = 0;
+        elPrice.placeholder = '0';
+    }
 
-  //   elPrice.reportValidity();
-  // };
+    elPrice.reportValidity();
+  };
 
-  // var setEqualTime = function (evt) {
-  //   document.querySelector('#timein').value = evt.target.value;
-  //   document.querySelector('#timeout').value = evt.target.value;
-  // };
+  var setEqualTime = function (evt) {
+    document.querySelector('#timein').value = evt.target.value;
+    document.querySelector('#timeout').value = evt.target.value;
+  };
 
   document.querySelector('#room_number').onchange = validateRoomsAndCapacity;
   document.querySelector('#capacity').onchange = validateRoomsAndCapacity;
 
-  // document.querySelector('#timein').onchange = setEqualTime;
-  // document.querySelector('#timeout').onchange = setEqualTime;
+  document.querySelector('#timein').onchange = setEqualTime;
+  document.querySelector('#timeout').onchange = setEqualTime;
 
-  // document.querySelector('#type').onchange = validatePriceAndType;
-  // document.querySelector('#price').onchange = validatePriceAndType;
+  document.querySelector('#type').onchange = validatePriceAndType;
+  document.querySelector('#price').onchange = validatePriceAndType;
 
   window.form = {
     fillAddress: fillAddress,
