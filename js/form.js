@@ -84,6 +84,12 @@
 
   document.querySelector('#room_number').onchange = validateRoomsAndCapacity;
   document.querySelector('#capacity').onchange = validateRoomsAndCapacity;
+  document.querySelector('.ad-form').addEventListener('submit', function (evt) {
+    validateRoomsAndCapacity();
+    if (document.querySelector('.ad-form :invalid')) {
+      evt.preventDefault();
+    }
+  });
 
   document.querySelector('#timein').onchange = setEqualTime;
   document.querySelector('#timeout').onchange = setEqualTime;
