@@ -40,19 +40,12 @@
     window.mapfilter.conditioner = inputs.conditioner.checked;
   };
 
-  var debounceTO;
-  var debounce = function () {
-    clearTimeout(debounceTO);
-    debounceTO = setTimeout(function () {
-      exportValues();
-
-      window.map.fill();
-    }, 500);
-  };
-
   for (var i = 0; i < keys.length; i++) {
     inputs[keys[i]].addEventListener('change', function () {
-      debounce();
+      window.utils.debounce(function () {
+        exportValues();
+        window.map.fill();
+      }, window.settings.delay);
     });
   }
 
