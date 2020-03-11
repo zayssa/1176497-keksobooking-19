@@ -13,7 +13,24 @@
     var objectsFragment = document.createDocumentFragment();
     var total = 0;
     for (var i = 0; i < objectsList.length && total < window.settings.maxPoints; i++) {
-      if (objectsList[i].offer && (window.mapfilter.type === objectsList[i].offer.type || window.mapfilter.type === 'any')) {
+      if (
+        objectsList[i].offer
+        && (window.mapfilter.type === objectsList[i].offer.type || window.mapfilter.type === 'any')
+        && (
+          window.mapfilter.price === 'low' && objectsList[i].offer.price < 10000
+          || window.mapfilter.price === 'middle' && objectsList[i].offer.price >= 10000 && objectsList[i].offer.price <= 50000
+          || window.mapfilter.price === 'high' && objectsList[i].offer.price > 50000
+          || window.mapfilter.price === 'any'
+        )
+        && (window.mapfilter.rooms === objectsList[i].offer.rooms.toString() || window.mapfilter.rooms === 'any')
+        && (window.mapfilter.guests === objectsList[i].offer.guests.toString() || window.mapfilter.guests === 'any')
+        && (objectsList[i].offer.features.indexOf('wifi') > -1 || !window.mapfilter.wifi)
+        && (objectsList[i].offer.features.indexOf('dishwasher') > -1 || !window.mapfilter.dishwasher)
+        && (objectsList[i].offer.features.indexOf('parking') > -1 || !window.mapfilter.parking)
+        && (objectsList[i].offer.features.indexOf('washer') > -1 || !window.mapfilter.washer)
+        && (objectsList[i].offer.features.indexOf('elevator') > -1 || !window.mapfilter.elevator)
+        && (objectsList[i].offer.features.indexOf('conditioner') > -1 || !window.mapfilter.conditioner)
+      ) {
         var newPin = window.mappin.create(objectsList[i]);
         objectsFragment.appendChild(newPin);
         total++;
