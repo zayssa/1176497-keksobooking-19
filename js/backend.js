@@ -12,7 +12,15 @@
     }
   };
 
+  var post = function (src, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', src, false);
+    xhr.send(data);
+    return xhr.status;
+  };
+
   window.backend = {
-    get: get
+    get: get,
+    post: post
   };
 })();
