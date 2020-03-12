@@ -96,14 +96,7 @@
     validateRoomsAndCapacity();
     if (!document.querySelector('.ad-form :invalid')) {
       var data = new FormData(document.querySelector('.ad-form'));
-      var response = window.backend.post('https://js.dump.academy/keksobooking', data);
-      switch (response) {
-        case 200:
-          window.modals.show('success');
-          break;
-        default:
-          window.modals.show('error');
-      }
+      window.backend.post('https://js.dump.academy/keksobooking', data, window.modals.show('success'), window.modals.show('error'));
     }
   });
 
