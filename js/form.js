@@ -84,18 +84,21 @@
 
   document.querySelector('#room_number').onchange = validateRoomsAndCapacity;
   document.querySelector('#capacity').onchange = validateRoomsAndCapacity;
-  document.querySelector('.ad-form').addEventListener('submit', function (evt) {
-    validateRoomsAndCapacity();
-    if (document.querySelector('.ad-form :invalid')) {
-      evt.preventDefault();
-    }
-  });
 
   document.querySelector('#timein').onchange = setEqualTime;
   document.querySelector('#timeout').onchange = setEqualTime;
 
   document.querySelector('#type').onchange = validatePriceAndType;
   document.querySelector('#price').onchange = validatePriceAndType;
+
+  document.querySelector('.ad-form').addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    validateRoomsAndCapacity();
+    if (!document.querySelector('.ad-form :invalid')) {
+      var data = new FormData(document.querySelector('.ad-form'));
+      window.backend.post('https://js.dump.academy/keksobooking', data, window.modals.show('success'), window.modals.show('error'));
+    }
+  });
 
   window.form = {
     fillAddress: fillAddress,

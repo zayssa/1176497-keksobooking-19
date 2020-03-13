@@ -50,9 +50,12 @@
     fillMap();
   };
 
-  document.querySelector('.map__pin--main').addEventListener('mousedown', function (evt) {
+  var mainPin = document.querySelector('.map__pin--main');
+  mainPin.addEventListener('mousedown', function (evt) {
     if (evt.button === 0) {
-      unlockMap();
+      if (window.settings.isDisabled) {
+        unlockMap();
+      }
     }
   });
 
