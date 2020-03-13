@@ -12,7 +12,22 @@
     }
   };
 
+  var post = function (src, data, successCallback, errorCallback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', src, false);
+    xhr.send(data);
+    switch (xhr.status) {
+      case 200:
+        successCallback();
+        break;
+      default:
+        errorCallback();
+    }
+    return xhr.status;
+  };
+
   window.backend = {
-    get: get
+    get: get,
+    post: post
   };
 })();
