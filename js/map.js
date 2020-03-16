@@ -1,6 +1,63 @@
 'use strict';
 
 (function () {
+  var POINTS_MAX_AMOUNT = 5;
+  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  var TEXT_FIELDS = ['type', 'rooms', 'guests'];
+  var prices = {
+    low: {
+      MAX: 9999
+    },
+    middle: {
+      MIN: 10000,
+      MAX: 50000
+    },
+    high: {
+      MIN: 50001
+    }
+  };
+
+  var mapLimitsY = {
+    min: window.settings.mapLimitsY.MIN - window.settings.mapPin.main.HEIGHT,
+    max: window.settings.mapLimitsY.MAX - window.settings.mapPin.main.HEIGHT
+  };
+
+  var elMap = document.querySelector('.map');
+  var elMapPins = document.querySelector('.map__pins');
+  var elMainPin = document.querySelector('.map__pin--main');
+  var elForm = document.querySelector('.ad-form');
+
+  var checkPrice = function (object) {
+    if (window.mapfilter.price === 'any') {
+      return true;
+    }
+
+    var min = prices[window.mapfilter.price].min || -Infinity;
+    var max = prices[window.mapfilter.price].max || Infinity;
+
+    return object.offer.price >= min && object.offer.price <= max;
+  };
+
+  var checkTextFields = function (object) {
+    var validFieldsCounter = 0;
+    TEXT_FIELDS.forEach(function (field) {
+      if (window.mapfilter[field] === object.offer[field].toString() || window.mapfilter[field] === 'any') {
+        validFieldsCounter++;
+      }
+    });
+    return validFieldsCounter === TEXT_FIELDS.length;
+  };
+
+  var checkFeatures = function (object) {
+    var validFeaturesCounter = 0;
+    FEATURES.forEach(function (feature) {
+      if (object.offer.features.indexOf(feature) > -1 || !window.mapfilter[feature]) {
+        validFeaturesCounter++;
+      }
+    });
+    return validFeaturesCounter === FEATURES.length;
+  };
+
   var clearMap = function () {
     window.mapcard.remove();
     window.mappin.remove();
@@ -11,47 +68,37 @@
     var objectsList = window.backend.get('https://js.dump.academy/keksobooking/data');
 
     var objectsFragment = document.createDocumentFragment();
-    var total = 0;
-    for (var i = 0; i < objectsList.length && total < window.settings.maxPoints; i++) {
-      if (
-        objectsList[i].offer
-        && (window.mapfilter.type === objectsList[i].offer.type || window.mapfilter.type === 'any')
-        && (
-          window.mapfilter.price === 'low' && objectsList[i].offer.price < 10000
-          || window.mapfilter.price === 'middle' && objectsList[i].offer.price >= 10000 && objectsList[i].offer.price <= 50000
-          || window.mapfilter.price === 'high' && objectsList[i].offer.price > 50000
-          || window.mapfilter.price === 'any'
-        )
-        && (window.mapfilter.rooms === objectsList[i].offer.rooms.toString() || window.mapfilter.rooms === 'any')
-        && (window.mapfilter.guests === objectsList[i].offer.guests.toString() || window.mapfilter.guests === 'any')
-        && (objectsList[i].offer.features.indexOf('wifi') > -1 || !window.mapfilter.wifi)
-        && (objectsList[i].offer.features.indexOf('dishwasher') > -1 || !window.mapfilter.dishwasher)
-        && (objectsList[i].offer.features.indexOf('parking') > -1 || !window.mapfilter.parking)
-        && (objectsList[i].offer.features.indexOf('washer') > -1 || !window.mapfilter.washer)
-        && (objectsList[i].offer.features.indexOf('elevator') > -1 || !window.mapfilter.elevator)
-        && (objectsList[i].offer.features.indexOf('conditioner') > -1 || !window.mapfilter.conditioner)
-      ) {
-        var newPin = window.mappin.create(objectsList[i]);
-        objectsFragment.appendChild(newPin);
-        total++;
+    var objectsCount = 0;
+    objectsList.some(function (object) {
+      if (objectsCount === POINTS_MAX_AMOUNT) {
+        return true;
       }
-    }
 
-    document.querySelector('.map__pins').appendChild(objectsFragment);
-    if (total) {
+      if (
+        object.offer && checkPrice(object) && checkTextFields(object) && checkFeatures(object)
+      ) {
+        var newPin = window.mappin.create(object);
+        objectsFragment.appendChild(newPin);
+        objectsCount++;
+      }
+
+      return false;
+    });
+
+    elMapPins.appendChild(objectsFragment);
+    if (objectsCount) {
       window.mapfilter.switchDisable(false);
-      document.querySelector('.map').classList.remove('map--faded');
+      elMap.classList.remove('map--faded');
     }
   };
 
   var unlockMap = function () {
     window.form.switchDisable(false);
-    document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+    elForm.classList.remove('ad-form--disabled');
     fillMap();
   };
 
-  var mainPin = document.querySelector('.map__pin--main');
-  mainPin.addEventListener('mousedown', function (evt) {
+  elMainPin.addEventListener('mousedown', function (evt) {
     if (evt.button === 0) {
       if (window.settings.isDisabled) {
         unlockMap();
@@ -62,9 +109,8 @@
         };
 
         var onMove = function (moveEvt) {
-          var elMap = document.querySelector('.map');
-          var xMin = -window.settings.mapPin.main.width / 2;
-          var xMax = elMap.clientWidth - window.settings.mapPin.main.width / 2;
+          var xMin = -window.settings.mapPin.main.WIDTH / 2;
+          var xMax = elMap.clientWidth - window.settings.mapPin.main.WIDTH / 2;
 
           var deltas = {
             x: startCoords.x - moveEvt.clientX,
@@ -76,8 +122,8 @@
             y: moveEvt.clientY
           };
 
-          mainPin.style.top = Math.min(window.settings.mapLimitY.max, Math.max(window.settings.mapLimitY.min, (mainPin.offsetTop - deltas.y))) + 'px';
-          mainPin.style.left = Math.min(xMax, Math.max(xMin, (mainPin.offsetLeft - deltas.x))) + 'px';
+          elMainPin.style.top = Math.min(mapLimitsY.max, Math.max(mapLimitsY.min, (elMainPin.offsetTop - deltas.y))) + 'px';
+          elMainPin.style.left = Math.min(xMax, Math.max(xMin, (elMainPin.offsetLeft - deltas.x))) + 'px';
           window.form.fillAddress(window.mappin.getCoords());
         };
 
@@ -92,7 +138,7 @@
     }
   });
 
-  document.querySelector('.map__pin--main').addEventListener('keydown', function (evt) {
+  elMainPin.addEventListener('keydown', function (evt) {
     if (evt.key === 'Enter') {
       unlockMap();
     }
