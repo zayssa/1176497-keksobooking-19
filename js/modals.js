@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  var elBody = document.querySelector('body');
+  var elMain = document.querySelector('main');
+
   var modals = {
     success: document.querySelector('#success'),
     error: document.querySelector('#error')
@@ -9,15 +12,15 @@
   var hideModal = function () {
     document.querySelector('.success, .error').remove();
 
-    document.querySelector('body').removeEventListener('click', hideModalByClick);
-    document.querySelector('body').removeEventListener('keydown', hideModalByEscape);
+    elBody.removeEventListener('click', clickHandler);
+    elBody.removeEventListener('keydown', keydownHandler);
   };
 
-  var hideModalByClick = function () {
+  var clickHandler = function () {
     hideModal();
   };
 
-  var hideModalByEscape = function (evt) {
+  var keydownHandler = function (evt) {
     if (evt.key === 'Escape') {
       hideModal();
     }
@@ -25,10 +28,10 @@
 
   var showModal = function (type) {
     var modal = modals[type].content.cloneNode(true);
-    document.querySelector('main').appendChild(modal);
+    elMain.appendChild(modal);
 
-    document.querySelector('body').addEventListener('click', hideModalByClick);
-    document.querySelector('body').addEventListener('keydown', hideModalByEscape);
+    elBody.addEventListener('click', clickHandler);
+    elBody.addEventListener('keydown', keydownHandler);
   };
 
   window.modals = {

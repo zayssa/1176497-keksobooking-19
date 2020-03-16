@@ -14,16 +14,11 @@
     conditioner: document.querySelector('#filter-conditioner')
   };
 
-  var keys = Object.keys(inputs);
-
   var switchDisable = function (flag) {
-    var formsList = document.querySelectorAll('.map__filters');
-    for (var i = 0; i < formsList.length; i++) {
-      var toDisable = formsList[i].querySelectorAll('input, select');
-      for (var k = 0; k < toDisable.length; k++) {
-        toDisable[k].disabled = flag;
-      }
-    }
+    var toDisable = document.querySelector('.map__filters').querySelectorAll('input, select');
+    toDisable.forEach(function (el) {
+      el.disabled = flag;
+    });
   };
 
   var exportValues = function () {
@@ -40,14 +35,15 @@
     window.mapfilter.conditioner = inputs.conditioner.checked;
   };
 
-  for (var i = 0; i < keys.length; i++) {
-    inputs[keys[i]].addEventListener('change', function () {
+  var keys = Object.keys(inputs);
+  keys.forEach(function (key) {
+    inputs[key].addEventListener('change', function () {
       window.utils.debounce(function () {
         exportValues();
         window.map.fill();
-      }, window.settings.delay);
+      }, window.settings.DEBOUNCE_DELAY);
     });
-  }
+  });
 
   window.mapfilter = {
     switchDisable: switchDisable
