@@ -1,47 +1,55 @@
 'use strict';
 
 (function () {
+  var template = document.querySelector('#pin').content;
+  var elMap = document.querySelector('.map');
+  var elMapPins = document.querySelector('.map__pins');
+  var elMainPin = document.querySelector('.map__pin--main');
+  var elFiltersContainer = document.querySelector('.map__filters-container');
+
   var getPinCoords = function () {
     var deltas = {
-      x: window.settings.mapPin.main.width / 2,
-      y: window.settings.mapPin.main.height
+      x: window.settings.mapPin.main.WIDTH / 2,
+      y: window.settings.mapPin.main.HEIGHT
     };
 
-    var el = document.querySelector('.map__pin--main');
     if (window.form.isDisabled) {
-      deltas.y = (window.settings.mapPin.main.height - window.settings.mapPin.main.tail) / 2;
+      deltas.y = (window.settings.mapPin.main.HEIGHT - window.settings.mapPin.main.TAIL) / 2;
     }
 
     return {
-      x: parseFloat(el.style.left) + deltas.x,
-      y: parseFloat(el.style.top) + deltas.y
+      x: parseFloat(elMainPin.style.left) + deltas.x,
+      y: parseFloat(elMainPin.style.top) + deltas.y
     };
   };
 
-  var createPin = function (item) {
-    var newPin = document.querySelector('#pin').content.cloneNode(true);
-    newPin.querySelector('.map__pin').style = 'left: ' + (item.location.x - window.settings.mapPin.width) + 'px; top: ' + (item.location.y - window.settings.mapPin.height) + 'px;';
-    newPin.querySelector('img').src = item.author.avatar;
-    newPin.querySelector('img').alt = item.offer.title;
+  var create = function (item) {
+    var newPin = template.cloneNode(true);
+    var newPinElement = newPin.querySelector('.map__pin');
+    var newPinImg = newPin.querySelector('img');
 
-    newPin.querySelector('.map__pin').addEventListener('click', function () {
-      document.querySelector('.map').insertBefore(window.mapcard.create(item), document.querySelector('.map__filters-container'));
+    newPinElement.style = 'left: ' + (item.location.x - window.settings.mapPin.WIDTH) + 'px; top: ' + (item.location.y - window.settings.mapPin.HEIGHT) + 'px;';
+    newPinImg.src = item.author.avatar;
+    newPinImg.alt = item.offer.title;
+
+    newPinElement.addEventListener('click', function () {
+      elMap.insertBefore(window.mapcard.create(item), elFiltersContainer);
     });
     return newPin;
   };
 
-  var removePins = function () {
-    if (document.querySelector('.map__pins .map__pin:not(.map__pin--main)')) {
-      var pins = document.querySelectorAll('.map__pins .map__pin:not(.map__pin--main)');
-      for (var i = 0; i < pins.length; i++) {
-        pins[i].remove();
-      }
+  var remove = function () {
+    if (elMapPins.querySelector('.map__pin:not(.map__pin--main)')) {
+      var pins = elMapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
+      pins.forEach(function (pin) {
+        pin.remove();
+      });
     }
   };
 
   window.mappin = {
-    create: createPin,
-    remove: removePins,
+    create: create,
+    remove: remove,
     getCoords: getPinCoords
   };
 })();

@@ -1,27 +1,69 @@
 'use strict';
 
 (function () {
+  var PHOTO_WIDTH = 70;
+  var PHOTO_HEIGHT = 70;
+
+  var elForm = document.querySelector('.ad-form');
+  var elAddress = document.querySelector('#address');
+  var elRooms = document.querySelector('#room_number');
+  var elCapacity = document.querySelector('#capacity');
+  var elType = document.querySelector('#type');
+  var elPrice = document.querySelector('#price');
+  var elTimeIn = document.querySelector('#timein');
+  var elTimeOut = document.querySelector('#timeout');
+  var elPhoto = document.querySelector('#images');
+  var elPhotoContainer = document.querySelector('.ad-form__photo');
+  var elAvatar = document.querySelector('#avatar');
+  var elAvatarImage = document.querySelector('.ad-form-header__preview img');
+  var toDisable = elForm.querySelectorAll('input, select');
+
   var fillAddress = function (coords) {
-    document.querySelector('#address').value = coords.x + ', ' + coords.y;
+    elAddress.value = coords.x + ', ' + coords.y;
   };
 
   var switchDisable = function (flag) {
-    var formsList = document.querySelectorAll('.ad-form');
-    for (var i = 0; i < formsList.length; i++) {
-      var toDisable = formsList[i].querySelectorAll('input, select');
-      for (var k = 0; k < toDisable.length; k++) {
-        toDisable[k].disabled = flag;
-      }
-    }
+    toDisable.forEach(function (el) {
+      el.disabled = flag;
+    });
+
     window.settings.isDisabled = flag;
     fillAddress(window.mappin.getCoords());
   };
 
+  var readURL = function (input, target) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (evt) {
+        target.src = evt.target.result;
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  };
+
+  var onPhotoSelect = function () {
+    var newPhoto = document.createElement('img');
+    newPhoto.width = PHOTO_WIDTH;
+    newPhoto.height = PHOTO_HEIGHT;
+    readURL(elPhoto, newPhoto);
+    elPhotoContainer.innerHTML = '';
+    elPhotoContainer.appendChild(newPhoto);
+  };
+
+  elPhoto.onchange = onPhotoSelect;
+
+  var onAvatarSelect = function () {
+    readURL(elAvatar, elAvatarImage);
+  };
+
+  elAvatar.onchange = onAvatarSelect;
+
   //  validation
 
   var validateRoomsAndCapacity = function () {
-    var valRooms = document.querySelector('#room_number').value;
-    var elCapacity = document.querySelector('#capacity');
+    var valRooms = elRooms.value;
     var valCapacity = elCapacity.value;
 
     elCapacity.setCustomValidity('');
@@ -53,8 +95,7 @@
   };
 
   var validatePriceAndType = function () {
-    var valType = document.querySelector('#type').value;
-    var elPrice = document.querySelector('#price');
+    var valType = elType.value;
 
     switch (valType) {
       case 'palace':
@@ -78,25 +119,29 @@
   };
 
   var setEqualTime = function (evt) {
-    document.querySelector('#timein').value = evt.target.value;
-    document.querySelector('#timeout').value = evt.target.value;
+    elTimeIn.value = evt.target.value;
+    elTimeOut.value = evt.target.value;
   };
 
-  document.querySelector('#room_number').onchange = validateRoomsAndCapacity;
-  document.querySelector('#capacity').onchange = validateRoomsAndCapacity;
+  elRooms.onchange = validateRoomsAndCapacity;
+  elCapacity.onchange = validateRoomsAndCapacity;
 
-  document.querySelector('#timein').onchange = setEqualTime;
-  document.querySelector('#timeout').onchange = setEqualTime;
+  elTimeIn.onchange = setEqualTime;
+  elTimeOut.onchange = setEqualTime;
 
-  document.querySelector('#type').onchange = validatePriceAndType;
-  document.querySelector('#price').onchange = validatePriceAndType;
+  elType.onchange = validatePriceAndType;
+  elPrice.onchange = validatePriceAndType;
 
-  document.querySelector('.ad-form').addEventListener('submit', function (evt) {
+  elForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     validateRoomsAndCapacity();
-    if (!document.querySelector('.ad-form :invalid')) {
-      var data = new FormData(document.querySelector('.ad-form'));
-      window.backend.post('https://js.dump.academy/keksobooking', data, window.modals.show('success'), window.modals.show('error'));
+    if (!elForm.querySelector(':invalid')) {
+      var data = new FormData(elForm);
+      window.backend.post('https://js.dump.academy/keksobooking', data, function () {
+        window.modals.show('success');
+      }, function () {
+        window.modals.show('error');
+      });
     }
   });
 

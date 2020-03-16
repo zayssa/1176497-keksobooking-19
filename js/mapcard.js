@@ -1,37 +1,70 @@
 'use strict';
 
 (function () {
-  var createCard = function (item) {
-    removeCard();
-    var newCard = document.querySelector('#card').content.cloneNode(true);
-    newCard.querySelector('.popup__title').innerHTML = item.offer.title;
-    newCard.querySelector('.popup__text--address').innerHTML = item.offer.address;
-    newCard.querySelector('.popup__text--price').innerHTML = item.offer.price + '₽/ночь';
-    newCard.querySelector('.popup__type').innerHTML = window.langs.type[item.offer.type];
-    newCard.querySelector('.popup__text--capacity').innerHTML = item.offer.rooms + ' комнаты для ' + item.offer.guests + ' гостей';
-    newCard.querySelector('.popup__text--time').innerHTML = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
-    if (item.offer.features.length) {
-      newCard.querySelector('.popup__features').innerHTML = item.offer.features.reduce(function (accumulator, feature) {
-        accumulator += accumulator ? ', ' + window.langs.features[feature] : window.langs.features[feature];
+  var OFFER_TYPES = {
+    'palace': 'Дворец',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'bungalo': 'Бунгало'
+  };
+
+  var OFFER_FEATURES = {
+    'wifi': 'Вай-фай',
+    'dishwasher': 'Посудомоечная машина',
+    'parking': 'Парковочное место',
+    'washer': 'Душ',
+    'elevator': 'Лифт',
+    'conditioner': 'Кондиционер'
+  };
+
+  var template = document.querySelector('#card').content;
+
+  var renderFeatures = function (el, offer) {
+    if (offer.features.length) {
+      el.querySelector('.popup__features').textContent = offer.features.reduce(function (accumulator, feature) {
+        accumulator += accumulator ? ', ' + OFFER_FEATURES[feature] : OFFER_FEATURES[feature];
         return accumulator;
       }, '');
     } else {
-      newCard.querySelector('.popup').removeChild(newCard.querySelector('.popup__features'));
+      el.querySelector('.popup').removeChild(el.querySelector('.popup__features'));
     }
-    newCard.querySelector('.popup__description').innerHTML = item.offer.description;
-    if (item.offer.photos.length) {
+  };
+
+  var renderPhotos = function (el, offer) {
+    if (offer.photos.length) {
       var itemPhotos = document.createDocumentFragment();
-      for (var i = 0; i < item.offer.photos.length; i++) {
-        var photo = newCard.querySelector('.popup__photo').cloneNode();
-        photo.src = item.offer.photos[i];
-        photo.alt = item.offer.title;
-        itemPhotos.appendChild(photo);
-      }
-      newCard.querySelector('.popup__photos').innerHTML = '';
-      newCard.querySelector('.popup__photos').appendChild(itemPhotos);
+      var itemPhotosTemplate = el.querySelector('.popup__photo');
+      offer.photos.forEach(function (photo) {
+        var photoTemplate = itemPhotosTemplate.cloneNode();
+        photoTemplate.src = photo;
+        photoTemplate.alt = offer.title;
+        itemPhotos.appendChild(photoTemplate);
+      });
+      el.querySelector('.popup__photos').innerHTML = '';
+      el.querySelector('.popup__photos').appendChild(itemPhotos);
     } else {
-      newCard.querySelector('.popup').removeChild(newCard.querySelector('.popup__photos'));
+      el.querySelector('.popup').removeChild(el.querySelector('.popup__photos'));
     }
+  };
+
+  var createCard = function (item) {
+    removeCard();
+
+    var newCard = template.cloneNode(true);
+
+    newCard.querySelector('.popup__title').textContent = item.offer.title;
+    newCard.querySelector('.popup__text--address').textContent = item.offer.address;
+    newCard.querySelector('.popup__text--price').textContent = item.offer.price + '₽/ночь';
+    newCard.querySelector('.popup__type').textContent = OFFER_TYPES[item.offer.type];
+    newCard.querySelector('.popup__text--capacity').textContent = item.offer.rooms + ' комнаты для ' + item.offer.guests + ' гостей';
+    newCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
+
+    renderFeatures(newCard, item.offer);
+
+    newCard.querySelector('.popup__description').textContent = item.offer.description;
+
+    renderPhotos(newCard, item.offer);
+
     newCard.querySelector('.popup__avatar').src = item.author.avatar;
 
     newCard.querySelector('.popup__close').addEventListener('click', removeCard);
@@ -40,12 +73,14 @@
         removeCard();
       }
     });
+
     return newCard;
   };
 
   var removeCard = function () {
-    if (document.querySelector('.map__card')) {
-      document.querySelector('.map__card').remove();
+    var elMap = document.querySelector('.map__card');
+    if (elMap) {
+      elMap.remove();
     }
   };
 
