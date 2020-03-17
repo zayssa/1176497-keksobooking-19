@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var elFilter = document.querySelector('.map__filters');
+
   var inputs = {
     type: document.querySelector('#housing-type'),
     price: document.querySelector('#housing-price'),
@@ -15,7 +17,7 @@
   };
 
   var switchDisable = function (flag) {
-    var toDisable = document.querySelector('.map__filters').querySelectorAll('input, select');
+    var toDisable = elFilter.querySelectorAll('input, select');
     toDisable.forEach(function (el) {
       el.disabled = flag;
     });
@@ -41,7 +43,7 @@
       window.utils.debounce(function () {
         exportValues();
         window.map.fill();
-      }, window.settings.DEBOUNCE_DELAY);
+      }, window.settings.CONSTANTS.DEBOUNCE_DELAY);
     });
   });
 

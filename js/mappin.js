@@ -9,12 +9,12 @@
 
   var getPinCoords = function () {
     var deltas = {
-      x: window.settings.mapPin.main.WIDTH / 2,
-      y: window.settings.mapPin.main.HEIGHT
+      x: window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2,
+      y: window.settings.CONSTANTS.MAP_MAIN_PIN.HEIGHT
     };
 
     if (window.form.isDisabled) {
-      deltas.y = (window.settings.mapPin.main.HEIGHT - window.settings.mapPin.main.TAIL) / 2;
+      deltas.y = (window.settings.CONSTANTS.MAP_MAIN_PIN.HEIGHT - window.settings.CONSTANTS.MAP_MAIN_PIN.TAIL) / 2;
     }
 
     return {
@@ -28,7 +28,7 @@
     var newPinElement = newPin.querySelector('.map__pin');
     var newPinImg = newPin.querySelector('img');
 
-    newPinElement.style = 'left: ' + (item.location.x - window.settings.mapPin.WIDTH) + 'px; top: ' + (item.location.y - window.settings.mapPin.HEIGHT) + 'px;';
+    newPinElement.style = 'left: ' + (item.location.x - window.settings.CONSTANTS.MAP_PIN.WIDTH) + 'px; top: ' + (item.location.y - window.settings.CONSTANTS.MAP_PIN.HEIGHT) + 'px;';
     newPinImg.src = item.author.avatar;
     newPinImg.alt = item.offer.title;
 

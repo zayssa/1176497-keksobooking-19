@@ -12,15 +12,15 @@
   var hideModal = function () {
     document.querySelector('.success, .error').remove();
 
-    elBody.removeEventListener('click', clickHandler);
-    elBody.removeEventListener('keydown', keydownHandler);
+    elBody.removeEventListener('click', onClick);
+    elBody.removeEventListener('keydown', onKeydown);
   };
 
-  var clickHandler = function () {
+  var onClick = function () {
     hideModal();
   };
 
-  var keydownHandler = function (evt) {
+  var onKeydown = function (evt) {
     if (evt.key === 'Escape') {
       hideModal();
     }
@@ -30,8 +30,8 @@
     var modal = modals[type].content.cloneNode(true);
     elMain.appendChild(modal);
 
-    elBody.addEventListener('click', clickHandler);
-    elBody.addEventListener('keydown', keydownHandler);
+    elBody.addEventListener('click', onClick);
+    elBody.addEventListener('keydown', onKeydown);
   };
 
   window.modals = {

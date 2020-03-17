@@ -4,7 +4,12 @@
   var POINTS_MAX_AMOUNT = 5;
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var TEXT_FIELDS = ['type', 'rooms', 'guests'];
-  var prices = {
+  var MAP_LIMITS_Y = {
+    MIN: window.settings.CONSTANTS.MAP_LIMITS_Y.MIN - window.settings.CONSTANTS.MAP_MAIN_PIN.HEIGHT,
+    MAX: window.settings.CONSTANTS.MAP_LIMITS_Y.MAX - window.settings.CONSTANTS.MAP_MAIN_PIN.HEIGHT
+  };
+
+  var PRICES = {
     low: {
       MAX: 9999
     },
@@ -17,11 +22,6 @@
     }
   };
 
-  var mapLimitsY = {
-    min: window.settings.mapLimitsY.MIN - window.settings.mapPin.main.HEIGHT,
-    max: window.settings.mapLimitsY.MAX - window.settings.mapPin.main.HEIGHT
-  };
-
   var elMap = document.querySelector('.map');
   var elMapPins = document.querySelector('.map__pins');
   var elMainPin = document.querySelector('.map__pin--main');
@@ -32,8 +32,8 @@
       return true;
     }
 
-    var min = prices[window.mapfilter.price].min || -Infinity;
-    var max = prices[window.mapfilter.price].max || Infinity;
+    var min = PRICES[window.mapfilter.price].MIN || -Infinity;
+    var max = PRICES[window.mapfilter.price].MAX || Infinity;
 
     return object.offer.price >= min && object.offer.price <= max;
   };
@@ -109,8 +109,8 @@
         };
 
         var onMove = function (moveEvt) {
-          var xMin = -window.settings.mapPin.main.WIDTH / 2;
-          var xMax = elMap.clientWidth - window.settings.mapPin.main.WIDTH / 2;
+          var xMin = -window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2;
+          var xMax = elMap.clientWidth - window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2;
 
           var deltas = {
             x: startCoords.x - moveEvt.clientX,
@@ -122,7 +122,7 @@
             y: moveEvt.clientY
           };
 
-          elMainPin.style.top = Math.min(mapLimitsY.max, Math.max(mapLimitsY.min, (elMainPin.offsetTop - deltas.y))) + 'px';
+          elMainPin.style.top = Math.min(MAP_LIMITS_Y.MAX, Math.max(MAP_LIMITS_Y.MIN, (elMainPin.offsetTop - deltas.y))) + 'px';
           elMainPin.style.left = Math.min(xMax, Math.max(xMin, (elMainPin.offsetLeft - deltas.x))) + 'px';
           window.form.fillAddress(window.mappin.getCoords());
         };

@@ -47,6 +47,17 @@
     }
   };
 
+  var removeCard = function () {
+    var elMap = document.querySelector('.map__card');
+    if (elMap) {
+      elMap.remove();
+    }
+  };
+
+  var onClose = function () {
+    removeCard();
+  };
+
   var createCard = function (item) {
     removeCard();
 
@@ -67,7 +78,7 @@
 
     newCard.querySelector('.popup__avatar').src = item.author.avatar;
 
-    newCard.querySelector('.popup__close').addEventListener('click', removeCard);
+    newCard.querySelector('.popup__close').addEventListener('click', onClose);
     document.addEventListener('keydown', function (evt) {
       if (evt.key === 'Escape') {
         removeCard();
@@ -75,13 +86,6 @@
     });
 
     return newCard;
-  };
-
-  var removeCard = function () {
-    var elMap = document.querySelector('.map__card');
-    if (elMap) {
-      elMap.remove();
-    }
   };
 
   window.mapcard = {

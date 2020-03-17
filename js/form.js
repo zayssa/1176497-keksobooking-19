@@ -4,6 +4,13 @@
   var PHOTO_WIDTH = 70;
   var PHOTO_HEIGHT = 70;
 
+  var PRICES_BY_TYPE = {
+    bungalo: '0',
+    flat: '1000',
+    house: '5000',
+    palace: '10000'
+  };
+
   var elForm = document.querySelector('.ad-form');
   var elAddress = document.querySelector('#address');
   var elRooms = document.querySelector('#room_number');
@@ -97,23 +104,8 @@
   var validatePriceAndType = function () {
     var valType = elType.value;
 
-    switch (valType) {
-      case 'palace':
-        elPrice.min = 10000;
-        elPrice.placeholder = '10000';
-        break;
-      case 'house':
-        elPrice.min = 5000;
-        elPrice.placeholder = '5000';
-        break;
-      case 'flat':
-        elPrice.min = 1000;
-        elPrice.placeholder = '1000';
-        break;
-      default:
-        elPrice.min = 0;
-        elPrice.placeholder = '0';
-    }
+    elPrice.min = PRICES_BY_TYPE[valType];
+    elPrice.placeholder = PRICES_BY_TYPE[valType];
 
     elPrice.reportValidity();
   };
