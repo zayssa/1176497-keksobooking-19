@@ -7,7 +7,7 @@
   var elMainPin = document.querySelector('.map__pin--main');
   var elFiltersContainer = document.querySelector('.map__filters-container');
 
-  var getPinCoords = function () {
+  var getCoords = function () {
     var deltas = {
       x: window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2,
       y: window.settings.CONSTANTS.MAP_MAIN_PIN.HEIGHT
@@ -50,6 +50,6 @@
   window.mappin = {
     create: create,
     remove: remove,
-    getCoords: getPinCoords
+    getCoords: getCoords
   };
 })();

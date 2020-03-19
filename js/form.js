@@ -5,10 +5,10 @@
   var PHOTO_HEIGHT = 70;
 
   var PRICES_BY_TYPE = {
-    bungalo: '0',
-    flat: '1000',
-    house: '5000',
-    palace: '10000'
+    'bungalo': '0',
+    'flat': '1000',
+    'house': '5000',
+    'palace': '10000'
   };
 
   var elForm = document.querySelector('.ad-form');

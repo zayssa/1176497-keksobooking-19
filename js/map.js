@@ -10,14 +10,14 @@
   };
 
   var PRICES = {
-    low: {
+    'low': {
       MAX: 9999
     },
-    middle: {
+    'middle': {
       MIN: 10000,
       MAX: 50000
     },
-    high: {
+    'high': {
       MIN: 50001
     }
   };
