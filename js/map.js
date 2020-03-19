@@ -103,8 +103,8 @@
     elForm.classList.add('ad-form--disabled');
     clearMap();
     elMap.classList.add('map--faded');
-    elMainPin.style.top = elMap.clientHeight / 2 - (window.settings.CONSTANTS.MAP_MAIN_PIN.HEIGHT - window.settings.CONSTANTS.MAP_MAIN_PIN.TAIL) / 2;
-    elMainPin.style.left = elMap.clientWidth / 2 - window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2 + 'px';
+    elMainPin.style.top = window.settings.CONSTANTS.MAP_MAIN_PIN.INITIAL_TOP + 'px';
+    elMainPin.style.left = window.settings.CONSTANTS.MAP_MAIN_PIN.INITIAL_LEFT + 'px';
   };
 
   elMainPin.addEventListener('mousedown', function (evt) {

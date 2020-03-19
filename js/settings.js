@@ -10,6 +10,8 @@
         HEIGHT: 70
       },
       MAP_MAIN_PIN: {
+        INITIAL_TOP: 375,
+        INITIAL_LEFT: 570,
         WIDTH: 64,
         HEIGHT: 87,
         TAIL: 23

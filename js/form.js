@@ -13,6 +13,7 @@
   };
 
   var elForm = document.querySelector('.ad-form');
+  var elReset = document.querySelector('.ad-form__reset');
   var elAddress = document.querySelector('#address');
   var elRooms = document.querySelector('#room_number');
   var elCapacity = document.querySelector('#capacity');
@@ -43,13 +44,9 @@
     elForm.reset();
     elPhotoContainer.innerHTML = '';
     elAvatarImage.src = AVATAR_DEFAULT;
-    fillAddress(window.mappin.getCoords());
-  };
-
-  var onSubmit = function () {
-    resetForm();
     window.mapfilter.reset();
     window.map.lock();
+    fillAddress(window.mappin.getCoords());
   };
 
   var readURL = function (input, target) {
@@ -144,13 +141,20 @@
     if (!elForm.querySelector(':invalid')) {
       var data = new FormData(elForm);
       window.backend.post('https://js.dump.academy/keksobooking', data, function () {
-        onSubmit();
+        resetForm();
         window.modals.show('success');
       }, function () {
         window.modals.show('error');
       });
     }
   });
+
+  var onReset = function (evt) {
+    evt.preventDefault();
+    resetForm();
+  };
+
+  elReset.addEventListener('click', onReset);
 
   window.form = {
     fillAddress: fillAddress,
