@@ -98,43 +98,51 @@
     fillMap();
   };
 
+  var lockMap = function () {
+    window.form.switchDisable(true);
+    elForm.classList.add('ad-form--disabled');
+    clearMap();
+    elMap.classList.add('map--faded');
+    elMainPin.style.top = elMap.clientHeight / 2 - (window.settings.CONSTANTS.MAP_MAIN_PIN.HEIGHT - window.settings.CONSTANTS.MAP_MAIN_PIN.TAIL) / 2;
+    elMainPin.style.left = elMap.clientWidth / 2 - window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2 + 'px';
+  };
+
   elMainPin.addEventListener('mousedown', function (evt) {
     if (evt.button === 0) {
       if (window.settings.isDisabled) {
         unlockMap();
-      } else {
-        var startCoords = {
-          x: evt.clientX,
-          y: evt.clientY
-        };
-
-        var onMove = function (moveEvt) {
-          var xMin = -window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2;
-          var xMax = elMap.clientWidth - window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2;
-
-          var deltas = {
-            x: startCoords.x - moveEvt.clientX,
-            y: startCoords.y - moveEvt.clientY
-          };
-
-          startCoords = {
-            x: moveEvt.clientX,
-            y: moveEvt.clientY
-          };
-
-          elMainPin.style.top = Math.min(MAP_LIMITS_Y.MAX, Math.max(MAP_LIMITS_Y.MIN, (elMainPin.offsetTop - deltas.y))) + 'px';
-          elMainPin.style.left = Math.min(xMax, Math.max(xMin, (elMainPin.offsetLeft - deltas.x))) + 'px';
-          window.form.fillAddress(window.mappin.getCoords());
-        };
-
-        var onRelease = function () {
-          document.removeEventListener('mousemove', onMove);
-          document.removeEventListener('mouseup', onRelease);
-        };
-
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onRelease);
       }
+      var startCoords = {
+        x: evt.clientX,
+        y: evt.clientY
+      };
+
+      var onMove = function (moveEvt) {
+        var xMin = -window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2;
+        var xMax = elMap.clientWidth - window.settings.CONSTANTS.MAP_MAIN_PIN.WIDTH / 2;
+
+        var deltas = {
+          x: startCoords.x - moveEvt.clientX,
+          y: startCoords.y - moveEvt.clientY
+        };
+
+        startCoords = {
+          x: moveEvt.clientX,
+          y: moveEvt.clientY
+        };
+
+        elMainPin.style.top = Math.min(MAP_LIMITS_Y.MAX, Math.max(MAP_LIMITS_Y.MIN, (elMainPin.offsetTop - deltas.y))) + 'px';
+        elMainPin.style.left = Math.min(xMax, Math.max(xMin, (elMainPin.offsetLeft - deltas.x))) + 'px';
+        window.form.fillAddress(window.mappin.getCoords());
+      };
+
+      var onRelease = function () {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onRelease);
+      };
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onRelease);
     }
   });
 
@@ -146,6 +154,7 @@
 
   window.map = {
     clear: clearMap,
-    fill: fillMap
+    fill: fillMap,
+    lock: lockMap
   };
 })();

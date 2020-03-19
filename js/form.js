@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var AVATAR_DEFAULT = 'img/muffin-grey.svg';
   var PHOTO_WIDTH = 70;
   var PHOTO_HEIGHT = 70;
 
@@ -36,6 +37,19 @@
 
     window.settings.isDisabled = flag;
     fillAddress(window.mappin.getCoords());
+  };
+
+  var resetForm = function () {
+    elForm.reset();
+    elPhotoContainer.innerHTML = '';
+    elAvatarImage.src = AVATAR_DEFAULT;
+    fillAddress(window.mappin.getCoords());
+  };
+
+  var onSubmit = function () {
+    resetForm();
+    window.mapfilter.reset();
+    window.map.lock();
   };
 
   var readURL = function (input, target) {
@@ -130,6 +144,7 @@
     if (!elForm.querySelector(':invalid')) {
       var data = new FormData(elForm);
       window.backend.post('https://js.dump.academy/keksobooking', data, function () {
+        onSubmit();
         window.modals.show('success');
       }, function () {
         window.modals.show('error');

@@ -23,6 +23,11 @@
     });
   };
 
+  var resetFilter = function () {
+    elFilter.reset();
+    exportValues();
+  };
+
   var exportValues = function () {
     window.mapfilter.type = inputs.type.value;
     window.mapfilter.price = inputs.price.value;
@@ -48,7 +53,8 @@
   });
 
   window.mapfilter = {
-    switchDisable: switchDisable
+    switchDisable: switchDisable,
+    reset: resetFilter
   };
   exportValues();
 })();

@@ -28,7 +28,7 @@
     var newPinElement = newPin.querySelector('.map__pin');
     var newPinImg = newPin.querySelector('img');
 
-    newPinElement.style = 'left: ' + (item.location.x - window.settings.CONSTANTS.MAP_PIN.WIDTH) + 'px; top: ' + (item.location.y - window.settings.CONSTANTS.MAP_PIN.HEIGHT) + 'px;';
+    newPinElement.style = 'left: ' + (item.location.x - window.settings.CONSTANTS.MAP_PIN.WIDTH / 2) + 'px; top: ' + (item.location.y - window.settings.CONSTANTS.MAP_PIN.HEIGHT) + 'px;';
     newPinImg.src = item.author.avatar;
     newPinImg.alt = item.offer.title;
 
